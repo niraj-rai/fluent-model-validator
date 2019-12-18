@@ -5,7 +5,7 @@ Model validation library written in typescript to validate model or business rul
 ```bash
 # Clone or download and extract the build
 # If you do not have typescript installed
-> npm run installAndRun
+> npm run install-and-start
 
 # If your system has typescript installed globally
 > npm run start

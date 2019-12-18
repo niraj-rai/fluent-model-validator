@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "installAndRun": "npm i -g typescript && npm run start",
+    "install-and-start": "npm i -g typescript && npm run start",
     "start": "tsc && node dist/main.js"
   },
   "keywords": [],
