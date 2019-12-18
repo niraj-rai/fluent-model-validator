@@ -6,8 +6,18 @@ class Validator<T>{
     private _validationRules: Array<ValidationRule<T>>;
     constructor(model: T) {
         this._model = model;
-        this._errors = new Array<string>();
-        this._validationRules = new Array<ValidationRule<T>>();
+        this._errors = [];
+        this._validationRules = [];
+    }
+
+    public setModel(model: T) {
+        this._model = model;
+        this.reset();
+    }
+
+    public reset(){
+        this._errors = [];
+        this._validationRules = [];
     }
 
     public addRule(ruleFn: Func<T, boolean>, errorMessage: string): Validator<T> {
