@@ -1,13 +1,21 @@
 {
-  "name": "typescript-model-validator",
+  "name": "fluent-model-validator",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
   "scripts": {
-    "install-and-start": "npm i -g typescript && npm run start",
-    "start": "tsc && node dist/main.js"
+    "install-and-start": "npm install -g typescript && npm install && npm run start",
+    "start": "tsc && node dist/main.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^24.0.24",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.3"
+  },
+  "dependencies": {}
 }

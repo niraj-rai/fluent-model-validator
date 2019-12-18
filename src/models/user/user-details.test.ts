@@ -26,3 +26,15 @@ export function runUserValidation() {
     validationResult = validator.validate();
     console.log(validationResult);
 }
+
+test('invalid user model', () => {
+    const result = validator.validate();
+    expect(Array.isArray(result) && result.length > 0).toBeTruthy();
+});
+
+test('valid user model', () => {
+    validator.setModel(validUserModel);
+    const result = validator.validate();
+    console.log(result);
+    expect(result===true).toBeTruthy();
+})

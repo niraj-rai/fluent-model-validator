@@ -27,6 +27,7 @@ class Validator<T>{
     }
 
     public validate(): (Array<string> | boolean) {
+        this._errors = [];
         this._validationRules && this._validationRules.forEach((value) => {
             try {
                 const ruleFn = value.ruleFn;
@@ -117,7 +118,6 @@ export interface ValidationRule<T> {
 export interface Func<T, TResult> {
     (item: T): TResult;
 }
-
 
 
 export default Validator;

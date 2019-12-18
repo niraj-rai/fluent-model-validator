@@ -1,13 +1,13 @@
 import Validator from "../../model-validator/validator";
 import {
-    LoginModel, 
+    LoginModel,
     invalidLoginModel,
     validLoginModel
 } from "./login";
 
 const error = "Password must be 8 characters long";
 
-let model:LoginModel = invalidLoginModel;
+let model: LoginModel = invalidLoginModel;
 const validator = new Validator<LoginModel>(model)
     .addRule((model) => (!model.username), "User name is required")
     .addRule((model) => (!model.password), "Password is required")
@@ -28,3 +28,15 @@ export function runLoginValidation() {
     validationResult = validator.validate();
     console.log(validationResult);
 }
+
+test('invalid login model', () => {
+    const result = validator.validate();
+    expect(Array.isArray(result) && result.length > 0).toBeTruthy();
+});
+
+test('valid login model', () => {
+    validator.setModel(validLoginModel);
+    const result = validator.validate();
+    console.log(result);
+    expect(result===true).toBeTruthy();
+})
