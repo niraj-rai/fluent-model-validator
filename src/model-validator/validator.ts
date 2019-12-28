@@ -4,30 +4,39 @@ class Validator<T>{
     private _errors: Array<string>;
     private _model: T;
     private _validationRules: Array<ValidationRule<T>>;
-    constructor(model: T) {
-        this._model = model;
+
+    /**
+     * Creates an instance of validator.
+     */
+    constructor() {
         this._errors = [];
         this._validationRules = [];
     }
 
-    public setModel(model: T) {
-        this._model = model;
-        this.reset();
-    }
-
-    public reset(){
+    private reset(model: T) {
+        this._model = model ? model : this._model; 
         this._errors = [];
-        this._validationRules = [];
     }
 
+    /**
+     * Adds rule
+     * @param ruleFn 
+     * @param errorMessage 
+     * @returns Validator 
+     */
     public addRule(ruleFn: Func<T, boolean>, errorMessage: string): Validator<T> {
         let validationRule: ValidationRule<T> = { ruleFn: ruleFn, error: errorMessage };
         this._validationRules.push(validationRule);
         return this;
     }
 
-    public validate(): (Array<string> | boolean) {
-        this._errors = [];
+    /**
+     * Validates given model against setup rule.
+     * @param model 
+     * @returns true or string[]
+     */
+    public validate(model: T): (Array<string> | boolean) {
+        this.reset(model);
         this._validationRules && this._validationRules.forEach((value) => {
             try {
                 const ruleFn = value.ruleFn;
@@ -44,6 +53,9 @@ class Validator<T>{
         else return true;
     }
 
+    /**
+     * Clears validator
+     */
     public clear(): void {
         delete this._errors;
         delete this._validationRules;
@@ -51,8 +63,16 @@ class Validator<T>{
     }
 
     /* Common Validation Rules */
-    public isRequired(value: string | number | Date, errorMessage: string): Validator<T> {
-        this.addRule(() => {
+    /**
+     * Adds a rquired validation rule.
+     * @param expr 
+     * @param errorMessage 
+     * @returns Validator 
+     */
+    public isRequired(expr: Func<T, any>, errorMessage: string): Validator<T> {
+        this.addRule((model) => {
+            const value = expr.apply(this, [model]);
+            console.log("Required Value: ", value);
             if (value) {
                 if (typeof (value) === "string") {
                     const tempValue = String(value);
@@ -65,8 +85,17 @@ class Validator<T>{
         return this;
     }
 
-    public isInvalidEmail(value: string, errorMessage: string, required: boolean = false): Validator<T> {
-        this.addRule(() => {
+    /**
+     * Adds an email validation rule.
+     * @param expr 
+     * @param errorMessage 
+     * @param [required] 
+     * @returns Validator
+     */
+    public isInvalidEmail(expr: Func<T, string>, errorMessage: string, required: boolean = false): Validator<T> {
+        this.addRule((model) => {
+            const value = expr.apply(this, [model]);
+            console.log("Email Value: ", value);
             if (value && value.trim().length > 0) {
                 const regex: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
                 return !regex.test(value)
@@ -76,8 +105,17 @@ class Validator<T>{
         return this;
     }
 
-    public isInvalidUrl(value: string, errorMessage: string, required: boolean = false): Validator<T> {
-        this.addRule(() => {
+    /**
+     * Adds an Url validation rule.
+     * @param expr 
+     * @param errorMessage 
+     * @param [required] 
+     * @returns Validator
+     */
+    public isInvalidUrl(expr: Func<T, string>, errorMessage: string, required: boolean = false): Validator<T> {
+        this.addRule((model) => {
+            const value = expr.apply(this, [model]);
+            console.log("Url Value: ", value);
             if (value && value.trim().length > 0) {
                 const regex: RegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)+[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
                 return !regex.test(value)
@@ -87,8 +125,18 @@ class Validator<T>{
         return this;
     }
 
-    public isInvalidPassportNumber(value: string, errorMessage: string, required: boolean = false, countryCode?: string): Validator<T> {
-        this.addRule(() => {
+    /**
+     * Adds a passport validation rule.
+     * @param expr 
+     * @param errorMessage 
+     * @param [required] 
+     * @param [countryCode] 
+     * @returns Validator
+     */
+    public isInvalidPassportNumber(expr: Func<string, string>, errorMessage: string, required: boolean = false, countryCode?: string): Validator<T> {
+        this.addRule((model) => {
+            const value = expr.apply(this, [model]);
+            console.log("Passport Value: ", value);
             if (value && value.trim().length > 0) {
                 const regex: RegExp = PassportRegex.DEFAULT;
                 return !regex.test(value)
@@ -98,8 +146,18 @@ class Validator<T>{
         return this;
     }
 
-    public isInvalidZipCode(value: string, errorMessage: string, required: boolean = false, countryCode?: string): Validator<T> {
-        this.addRule(() => {
+    /**
+     * Adds a zipcode validation rule.
+     * @param expr 
+     * @param errorMessage 
+     * @param [required] 
+     * @param [countryCode] 
+     * @returns Validator
+     */
+    public isInvalidZipCode(expr: Func<T, string>, errorMessage: string, required: boolean = false, countryCode?: string): Validator<T> {
+        this.addRule((model) => {
+            const value = expr.apply(this, [model]);
+            console.log("Zipcode Value: ", value);
             if (value && value.trim().length > 0) {
                 const regex: RegExp = ZipCodeRegex.DEFAULT;
                 return !regex.test(value)
@@ -110,14 +168,22 @@ class Validator<T>{
     }
 }
 
+/**
+ * Validation rule
+ * @template T 
+ */
 export interface ValidationRule<T> {
     ruleFn: Func<T, boolean>;
     error: string;
 }
 
+/**
+ * Func
+ * @template T 
+ * @template TResult 
+ */
 export interface Func<T, TResult> {
     (item: T): TResult;
 }
-
 
 export default Validator;

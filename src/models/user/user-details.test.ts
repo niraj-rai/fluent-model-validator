@@ -6,35 +6,20 @@ import {
     validUserModel
 } from "./user-details"
 
-let model:UserModel = invalidUserModel;
-const validator = new Validator<UserModel>(model)
-    .addRule((model) => (!model.firstName), "First name is required")
-    .addRule((model) => (!model.lastName), "Last name is required")
-    .isRequired(model.givenName, "Given name is required")
-    .isInvalidEmail(model.emailId, "Valid email is required");
-
-export function runUserValidation() {
-    console.log("--------------For invalid user Model------------------------");
-    //For invalid model
-    let validationResult = validator.validate();
-    console.log(validationResult);
-
-    console.log("--------------For valid user Model------------------------");
-    //For valid model
-    model = validUserModel;
-    validator.setModel(model);
-    validationResult = validator.validate();
-    console.log(validationResult);
-}
+const validator = new Validator<UserModel>()
+    .addRule(model => (!model.firstName), "First name is required")
+    .addRule(model => (!model.lastName), "Last name is required")
+    .isRequired(model=>model.givenName, "Given name is required")
+    .isInvalidEmail(model=>model.emailId, "Valid email is required");
 
 test('invalid user model', () => {
-    const result = validator.validate();
+    const result = validator.validate(invalidUserModel);
+    console.log(result);
     expect(Array.isArray(result) && result.length > 0).toBeTruthy();
 });
 
 test('valid user model', () => {
-    validator.setModel(validUserModel);
-    const result = validator.validate();
+    const result = validator.validate(validUserModel);
     console.log(result);
     expect(result===true).toBeTruthy();
 })

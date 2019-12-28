@@ -6,7 +6,7 @@ export interface LoginModel{
 }
 
 export const invalidLoginModel:LoginModel = {
-    username: "nir",
+    username: null,
     password: "1234",
     systemType: "  4",
     url: "www",
@@ -15,6 +15,6 @@ export const invalidLoginModel:LoginModel = {
 export const validLoginModel:LoginModel = {
     username: "nirajrai",
     password: "Password@124!",
-    systemType: "  4",
+    systemType: "4",
     url: "http://www.abc.com",
 }
