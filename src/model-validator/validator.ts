@@ -1,6 +1,6 @@
 import { ZipCodeRegex, PassportRegex } from "./validation-regex";
 
-class Validator<T>{
+export class Validator<T>{
     private _errors: Array<string>;
     private _model: T;
     private _validationRules: Array<ValidationRule<T>>;
@@ -64,7 +64,7 @@ class Validator<T>{
 
     /* Common Validation Rules */
     /**
-     * Adds a rquired validation rule.
+     * Adds a required validation rule.
      * @param expr 
      * @param errorMessage 
      * @returns Validator 
@@ -117,7 +117,7 @@ class Validator<T>{
             const value = expr.apply(this, [model]);
             console.log("Url Value: ", value);
             if (value && value.trim().length > 0) {
-                const regex: RegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)+[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+                const regex: RegExp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)+[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
                 return !regex.test(value)
             }
             return (required) ? true : false;
@@ -147,7 +147,7 @@ class Validator<T>{
     }
 
     /**
-     * Adds a zipcode validation rule.
+     * Adds a zip code validation rule.
      * @param expr 
      * @param errorMessage 
      * @param [required] 
@@ -157,7 +157,7 @@ class Validator<T>{
     public isInvalidZipCode(expr: Func<T, string>, errorMessage: string, required: boolean = false, countryCode?: string): Validator<T> {
         this.addRule((model) => {
             const value = expr.apply(this, [model]);
-            console.log("Zipcode Value: ", value);
+            console.log("Zip code Value: ", value);
             if (value && value.trim().length > 0) {
                 const regex: RegExp = ZipCodeRegex.DEFAULT;
                 return !regex.test(value)

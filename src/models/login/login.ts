@@ -16,5 +16,5 @@ export const validLoginModel:LoginModel = {
     username: "nirajrai",
     password: "Password@124!",
     systemType: "4",
-    url: "http://www.abc.com",
+    url: "http://www.ABC.Com",
 }
