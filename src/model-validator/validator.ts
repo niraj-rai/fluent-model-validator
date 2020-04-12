@@ -14,7 +14,7 @@ export class Validator<T>{
     }
 
     private reset(model: T) {
-        this._model = model ? model : this._model; 
+        this._model = model ? model : this._model;
         this._errors = [];
     }
 
@@ -101,7 +101,7 @@ export class Validator<T>{
                 return !regex.test(value)
             }
             return (required) ? true : false;
-        }, errorMessage || "Invalid emaild Id")
+        }, errorMessage || "Invalid email Id")
         return this;
     }
 
@@ -164,6 +164,34 @@ export class Validator<T>{
             }
             return (required) ? true : false;
         }, errorMessage || "Invalid ZipCode")
+        return this;
+    }
+
+    /**
+     * Adds a regex based validation rule.
+     * @param expr 
+     * @param regex 
+     * @param errorMessage 
+     * @param [required] 
+     * @returns Validator 
+     */
+    public isInvalid(expr: Func<T, string | number>, regex: RegExp, errorMessage: string, required: boolean = false): Validator<T> {
+        this.addRule((model) => {
+            const value = expr.apply(this, [model]);
+            console.log("Value: ", value);
+            if (value && value.trim().length > 0) {
+                return !regex.test(value)
+            }
+            if (value) {
+                if (typeof (value) === "string") {
+                    const tempValue = String(value);
+                    return !regex.test(tempValue)
+                }
+                else
+                    return !regex.test(value)
+            }
+            return (required) ? true : false;
+        }, errorMessage || "Invalid Value")
         return this;
     }
 }
