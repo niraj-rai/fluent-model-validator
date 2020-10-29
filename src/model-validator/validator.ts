@@ -19,7 +19,7 @@ export class Validator<T>{
     }
 
     /**
-     * Adds rule
+     * Adds a validation rule
      * @param ruleFn 
      * @param errorMessage 
      * @returns Validator 
